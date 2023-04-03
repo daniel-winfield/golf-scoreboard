@@ -1,20 +1,20 @@
 .flag {
-  width: 50px;
+  width: 150px;
   position: absolute;
   top: -9999px;
   bottom: -9999px;
   left: -9999px;
   right: -9999px;
   margin: auto;
-  opacity: 80%;
+  opacity: 85%;
 }
 
 .flag-container {
   position: relative;
   overflow: hidden;
-  width: 45px;
-  height: 30px;
-  border-radius: 5px;
+  width: 135px;
+  height: 90px;
+  border-radius: 15px;
 }
 
 body {
@@ -28,8 +28,10 @@ body {
   justify-content: center;
 }
 
-.sb-header {
+.sb-header,
+.score-hero {
   font-family: "Inter", sans-serif;
+  font-size: 3em;
 }
 
 .text-centre {
@@ -38,4 +40,75 @@ body {
 
 .text-left {
   text-align: left;
+}
+
+.score-hero {
+  font-size: 2.5em;
+}
+
+.score-title {
+  background-color: aquamarine;
+  color: #247359;
+  border-radius: 0 0 5px 5px;
+  padding: 2px 5px;
+}
+
+.score-title:first-of-type {
+  background-color: orange;
+  color: #5a3a00;
+}
+
+.score-title:last-of-type {
+  background-color: #c682ff;
+  color: #401c5f;
+}
+
+.score-value {
+  background-color: #247359;
+  color: aquamarine;
+  border-radius: 5px 5px 0 0;
+  padding: 2px 5px;
+}
+
+.score-value:first-of-type {
+  background-color: #5a3a00;
+  color: orange;
+}
+
+.score-value:last-of-type {
+  background-color: #401c5f;
+  color: #c682ff;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.player-name {
+  font-size: 2em;
+}
+
+.position {
+  font-size: 4em;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.position.position-1 {
+  background-color: #ffe223;
+  color: #6b5d03;
+}
+
+.position.position-2 {
+  background-color: silver;
+  color: #606060;
+}
+
+.position.position-3 {
+  background-color: #cd7f32;
+  color: #5a330d;
+}
+
+.vertical-spacer {
+  width: 4px;
 }

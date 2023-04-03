@@ -1,4 +1,5 @@
 getLivData();
+// getEspnData();
 
 function addToScoreboard(scoreboardData) {
   let table = document.getElementById("sb-table-body");
@@ -6,6 +7,26 @@ function addToScoreboard(scoreboardData) {
 
   for (let i = 0; i < scoreboardData.length; i++) {
     row = table.insertRow();
+    cell = row.insertCell();
+    cell.colSpan = 8;
+    cell.setHTML("<hr />");
+
+    row = table.insertRow();
+
+    cell = row.insertCell();
+    if (i > 0 && scoreboardData[i].score === scoreboardData[i - 1].score) {
+      cell.textContent = "-";
+    } else {
+      cell.textContent = scoreboardData[i].position;
+    }
+
+    cell.classList.add("position", "position-" + scoreboardData[i].position);
+    cell.rowSpan = 3;
+
+    cell = row.insertCell();
+    cell.rowSpan = 3;
+    cell.classList.add("vertical-spacer");
+
     let flagImage = document.createElement("img");
     flagImage.src = scoreboardData[i].flag.href;
     flagImage.alt = scoreboardData[i].flag.alt;
@@ -17,26 +38,49 @@ function addToScoreboard(scoreboardData) {
 
     cell = row.insertCell();
     cell.appendChild(flagContainer);
+    cell.rowSpan = 3;
+
+    cell = row.insertCell();
+    cell.rowSpan = 3;
+    cell.classList.add("vertical-spacer");
 
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].name;
-    cell.classList.add("text-left");
+    cell.classList.add("text-left", "player-name");
+    cell.rowSpan = 3;
 
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].score;
-    cell.classList.add("text-centre");
+    cell.classList.add("text-centre", "score-hero");
+    cell.colSpan = 3;
+
+    row = table.insertRow();
 
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].r1;
-    cell.classList.add("text-centre");
+    cell.classList.add("text-centre", "score-value");
 
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].r2;
-    cell.classList.add("text-centre");
+    cell.classList.add("text-centre", "score-value");
 
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].r3;
-    cell.classList.add("text-centre");
+    cell.classList.add("text-centre", "score-value");
+
+    row = table.insertRow();
+
+    cell = row.insertCell();
+    cell.textContent = "R1";
+    cell.classList.add("text-centre", "score-title");
+
+    cell = row.insertCell();
+    cell.textContent = "R2";
+    cell.classList.add("text-centre", "score-title");
+
+    cell = row.insertCell();
+    cell.textContent = "R3";
+    cell.classList.add("text-centre", "score-title");
   }
 }
 
@@ -57,6 +101,7 @@ function getEspnData() {
             r1: c.linescores[0].value,
             r2: c.linescores[1].value,
             r3: c.linescores[2].value,
+            position: 1,
           };
         }
       );
@@ -81,6 +126,7 @@ function getLivData() {
           r1: c.rounds[0],
           r2: c.rounds[1],
           r3: c.rounds[2],
+          position: c.rank,
         };
       });
       addToScoreboard(scoreboardData);
