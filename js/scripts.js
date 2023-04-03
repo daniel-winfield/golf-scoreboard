@@ -15,7 +15,8 @@ function addToScoreboard(scoreboardData, timestamp) {
     row = table.insertRow();
     cell = row.insertCell();
     cell.colSpan = 8;
-    cell.setHTML("<hr />");
+    let hrElement = document.createElement("hr");
+    cell.appendChild(hrElement);
 
     row = table.insertRow();
 
