@@ -1,0 +1,41 @@
+.flag {
+  width: 50px;
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+  opacity: 80%;
+}
+
+.flag-container {
+  position: relative;
+  overflow: hidden;
+  width: 45px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+body {
+  color: #ffffff;
+  background-color: black;
+  font-family: "Raleway", sans-serif;
+}
+
+.sb-container {
+  display: flex;
+  justify-content: center;
+}
+
+.sb-header {
+  font-family: "Inter", sans-serif;
+}
+
+.text-centre {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
