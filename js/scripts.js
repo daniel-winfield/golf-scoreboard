@@ -2,7 +2,6 @@ getLivData();
 // getEspnData();
 
 function addToScoreboard(scoreboardData, timestamp) {
-  debugger;
   if (timestamp) {
     let timestampElement = document.getElementById("sb-timestamp");
     timestampElement.innerText = new Date(timestamp).toString();
