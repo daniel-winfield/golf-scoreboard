@@ -1,7 +1,14 @@
 getLivData();
 // getEspnData();
 
-function addToScoreboard(scoreboardData) {
+function addToScoreboard(scoreboardData, timestamp) {
+  debugger;
+  if (timestamp) {
+    let timestampElement = document.getElementById("sb-timestamp");
+    timestampElement.innerText = new Date(timestamp).toString();
+    document.getElementById("timestamp-container").classList.add("visible");
+  }
+
   let table = document.getElementById("sb-table-body");
   let row, cell;
 
@@ -129,6 +136,6 @@ function getLivData() {
           position: c.rank,
         };
       });
-      addToScoreboard(scoreboardData);
+      addToScoreboard(scoreboardData, data.timeStamp);
     });
 }

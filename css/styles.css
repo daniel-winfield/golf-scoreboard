@@ -112,3 +112,13 @@ table {
 .vertical-spacer {
   width: 4px;
 }
+
+#timestamp-container {
+  text-align: right;
+  color: #aeaeae;
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible !important;
+}
