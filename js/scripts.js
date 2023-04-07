@@ -23,7 +23,7 @@ function updateScoreboard(value) {
   }
 }
 
-function addToScoreboard(scoreboardData, timestamp, pageTitle) {
+function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
   if (pageTitle) {
     let titleElement = document.getElementById("sb-name");
     titleElement.innerText = pageTitle;
@@ -44,13 +44,37 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle) {
     table.deleteRow(0);
   }
 
-  let row, cell;
+  let row, cell, cutoffIndex;
+
+  if (cutoffNumber) {
+    cutoffIndex = calculateCutoffLine(scoreboardData, cutoffNumber);
+  }
 
   for (let i = 0; i < scoreboardData.length; i++) {
+    if (cutoffIndex && i == cutoffIndex) {
+      row = table.insertRow();
+      cell = row.insertCell();
+      cell.colSpan = 8;
+      let hrElement = document.createElement("hr");
+      hrElement.classList.add("cutoff-line");
+      cell.appendChild(hrElement);
+
+      row = table.insertRow();
+      cell = row.insertCell();
+      cell.colSpan = 8;
+      cell.classList.add("cutoff-text");
+      let spanElement = document.createElement("span");
+      spanElement.innerText = "Cutoff";
+      cell.appendChild(spanElement);
+    }
+
     row = table.insertRow();
     cell = row.insertCell();
     cell.colSpan = 8;
     let hrElement = document.createElement("hr");
+    if (cutoffIndex && i == cutoffIndex) {
+      hrElement.classList.add("cutoff-line");
+    }
     cell.appendChild(hrElement);
 
     row = table.insertRow();
@@ -166,19 +190,39 @@ function getMastersData() {
             name: c.athlete.shortName,
             flag: c.athlete.flag,
             score: c.score,
-            r1: constructRoundScore(
-              c.linescores[0].value,
-              c.linescores[0].linescores != null
-                ? c.linescores[0].linescores.length
-                : null
-            ),
-            r2: constructRoundScore(
-              c.linescores[1].value,
-              c.linescores[1].linescores != null
-                ? c.linescores[1].linescores.length
-                : null
-            ),
-            // r3: c.linescores[2].value,
+            r1: c.linescores[0]
+              ? constructRoundScore(
+                  c.linescores[0].value,
+                  c.linescores[0].linescores != null
+                    ? c.linescores[0].linescores.length
+                    : null
+                )
+              : "~",
+            r2: c.linescores[1]
+              ? constructRoundScore(
+                  c.linescores[1].value,
+                  c.linescores[1].linescores != null
+                    ? c.linescores[1].linescores.length
+                    : null
+                )
+              : "~",
+            r3: c.linescores[2]
+              ? constructRoundScore(
+                  c.linescores[2].value,
+                  c.linescores[2].linescores != null
+                    ? c.linescores[2].linescores.length
+                    : null
+                )
+              : "~",
+            r4:
+              c.linescores[3] && c.linescores[3].length
+                ? constructRoundScore(
+                    c.linescores[3].value,
+                    c.linescores[3].linescores != null
+                      ? c.linescores[3].linescores.length
+                      : null
+                  )
+                : "~",
             position: index + 1,
           };
         }
@@ -195,7 +239,7 @@ function getMastersData() {
         }
       });
 
-      addToScoreboard(scoreboardData, Date.now(), data.events[0].name);
+      addToScoreboard(scoreboardData, Date.now(), data.events[0].name, 50);
     });
 }
 
@@ -225,8 +269,15 @@ function getLivData() {
           position: c.rank,
         };
       });
-      addToScoreboard(scoreboardData, data.timeStamp);
+      addToScoreboard(scoreboardData, data.timeStamp, "Liv Golf League", null);
     });
 }
 
-function calculateCutoffLine(scoreboardData, cutoffNumber) {}
+function calculateCutoffLine(scoreboardData, cutoffNumber) {
+  // return scoreboardData.findLastIndex((data) => data.position == cutoffNumber);
+  for (let i = 0; i < scoreboardData.length; i++) {
+    if (scoreboardData[i].position > cutoffNumber) {
+      return i;
+    }
+  }
+}

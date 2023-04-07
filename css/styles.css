@@ -18,14 +18,22 @@
 }
 
 .liv-theme {
+  --bg-colour-values: 0, 0, 0;
+  --bg-colour: rgb(var(--bg-colour-values));
+  --text-colour-values: 255, 255, 255;
+  --text-colour: rgb(var(--text-colour-values));
   color: #ffffff;
   background-color: black;
   font-family: "Raleway", sans-serif;
 }
 
 .masters-theme {
-  background-color: #193526;
-  color: #00cc8d;
+  --bg-colour-values: 25, 53, 38;
+  --bg-colour: rgb(var(--bg-colour-values));
+  --text-colour-values: 0, 204, 141;
+  --text-colour: rgb(var(--text-colour-values));
+  background-color: var(--bg-colour);
+  color: var(--text-colour);
   font-family: "Libre Baskerville";
 }
 
@@ -133,4 +141,27 @@ table {
 
 .visible {
   visibility: visible !important;
+}
+
+.cutoff-text {
+  font-variant: small-caps;
+  text-align: center;
+  background: repeating-linear-gradient(
+    45deg,
+    rgb(var(--text-colour-values), 0.5),
+    rgb(var(--text-colour-values), 0.5) 10px,
+    #fff0 10px,
+    #fff0 20px
+  );
+}
+
+.cutoff-text span {
+  background-color: var(--bg-colour);
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 5px;
+}
+
+hr.cutoff-line {
+  border-style: dashed;
 }
