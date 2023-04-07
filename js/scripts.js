@@ -1,14 +1,49 @@
-getLivData();
-// getEspnData();
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
 
-function addToScoreboard(scoreboardData, timestamp) {
+let value = params.tournament;
+updateScoreboard(value);
+setInterval(updateScoreboard, 2 * 60 * 1000, value);
+
+function updateScoreboard(value) {
+  switch (value == null ? null : value.toLowerCase()) {
+    case "liv":
+      getLivData();
+      // getEspnData();
+
+      document.body.classList.add("liv-theme");
+      break;
+    case "masters":
+      getMastersData();
+      document.body.classList.add("masters-theme");
+      break;
+    default:
+      break;
+  }
+}
+
+function addToScoreboard(scoreboardData, timestamp, pageTitle) {
+  if (pageTitle) {
+    let titleElement = document.getElementById("sb-name");
+    titleElement.innerText = pageTitle;
+  }
+
   if (timestamp) {
     let timestampElement = document.getElementById("sb-timestamp");
-    timestampElement.innerText = new Date(timestamp).toString();
+    timestampElement.innerText = new Date(timestamp).toLocaleString("en-GB", {
+      dateStyle: "full",
+      timeStyle: "long",
+    });
     document.getElementById("timestamp-container").classList.add("visible");
   }
 
   let table = document.getElementById("sb-table-body");
+
+  while (table.rows.length > 0) {
+    table.deleteRow(0);
+  }
+
   let row, cell;
 
   for (let i = 0; i < scoreboardData.length; i++) {
@@ -24,7 +59,7 @@ function addToScoreboard(scoreboardData, timestamp) {
     if (i > 0 && scoreboardData[i].score === scoreboardData[i - 1].score) {
       cell.textContent = "-";
     } else {
-      cell.textContent = scoreboardData[i].position;
+      cell.textContent = i + 1;
     }
 
     cell.classList.add("position", "position-" + scoreboardData[i].position);
@@ -117,6 +152,60 @@ function getEspnData() {
     });
 }
 
+function getMastersData() {
+  var uri = "https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard";
+
+  fetch(uri)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      let scoreboardData = data.events[0].competitions[0].competitors.map(
+        (c, index) => {
+          return {
+            name: c.athlete.shortName,
+            flag: c.athlete.flag,
+            score: c.score,
+            r1: constructRoundScore(
+              c.linescores[0].value,
+              c.linescores[0].linescores != null
+                ? c.linescores[0].linescores.length
+                : null
+            ),
+            r2: constructRoundScore(
+              c.linescores[1].value,
+              c.linescores[1].linescores != null
+                ? c.linescores[1].linescores.length
+                : null
+            ),
+            // r3: c.linescores[2].value,
+            position: index + 1,
+          };
+        }
+      );
+
+      // Fix position of tied places
+      scoreboardData.forEach((d, index) => {
+        if (index === 0) {
+          return;
+        }
+
+        if (d.score === scoreboardData[index - 1].score) {
+          d.position = scoreboardData[index - 1].position;
+        }
+      });
+
+      addToScoreboard(scoreboardData, Date.now(), data.events[0].name);
+    });
+}
+
+function constructRoundScore(roundTotal, holesComplete) {
+  if (holesComplete && holesComplete < 18) {
+    return `${roundTotal} (${holesComplete})`;
+  }
+  return roundTotal;
+}
+
 function getLivData() {
   var uri = "https://web-common.livgolf.com/api/leaderboard/players/11";
 
@@ -139,3 +228,5 @@ function getLivData() {
       addToScoreboard(scoreboardData, data.timeStamp);
     });
 }
+
+function calculateCutoffLine(scoreboardData, cutoffNumber) {}

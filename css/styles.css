@@ -17,10 +17,16 @@
   border-radius: 15px;
 }
 
-body {
+.liv-theme {
   color: #ffffff;
   background-color: black;
   font-family: "Raleway", sans-serif;
+}
+
+.masters-theme {
+  background-color: #193526;
+  color: #00cc8d;
+  font-family: "Libre Baskerville";
 }
 
 .sb-container {
@@ -32,6 +38,11 @@ body {
 .score-hero {
   font-family: "Inter", sans-serif;
   font-size: 3em;
+}
+
+.masters-theme .sb-header,
+.masters-theme .score-hero {
+  font-family: "Libre Baskerville";
 }
 
 .text-centre {
@@ -92,6 +103,7 @@ table {
   font-size: 4em;
   border-radius: 15px;
   text-align: center;
+  min-width: 65px;
 }
 
 .position.position-1 {
