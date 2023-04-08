@@ -7,6 +7,7 @@ updateScoreboard(value);
 setInterval(updateScoreboard, 2 * 60 * 1000, value);
 
 function updateScoreboard(value) {
+  console.log("Refresh started: " + value);
   switch (value == null ? null : value.toLowerCase()) {
     case "liv":
       getLivData();
@@ -51,17 +52,19 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
   }
 
   for (let i = 0; i < scoreboardData.length; i++) {
+    let numOfCols = 9;
+
     if (cutoffIndex && i == cutoffIndex) {
       row = table.insertRow();
       cell = row.insertCell();
-      cell.colSpan = 8;
+      cell.colSpan = numOfCols;
       let hrElement = document.createElement("hr");
       hrElement.classList.add("cutoff-line");
       cell.appendChild(hrElement);
 
       row = table.insertRow();
       cell = row.insertCell();
-      cell.colSpan = 8;
+      cell.colSpan = numOfCols;
       cell.classList.add("cutoff-text");
       let spanElement = document.createElement("span");
       spanElement.innerText = "Cutoff";
@@ -70,7 +73,7 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
 
     row = table.insertRow();
     cell = row.insertCell();
-    cell.colSpan = 8;
+    cell.colSpan = numOfCols;
     let hrElement = document.createElement("hr");
     if (cutoffIndex && i == cutoffIndex) {
       hrElement.classList.add("cutoff-line");
@@ -115,10 +118,11 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
     cell.classList.add("text-left", "player-name");
     cell.rowSpan = 3;
 
+    let numOfRounds = 4;
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].score;
     cell.classList.add("text-centre", "score-hero");
-    cell.colSpan = 3;
+    cell.colSpan = numOfRounds;
 
     row = table.insertRow();
 
@@ -134,6 +138,12 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
     cell.textContent = scoreboardData[i].r3;
     cell.classList.add("text-centre", "score-value");
 
+    if (scoreboardData[i].r4) {
+      cell = row.insertCell();
+      cell.textContent = scoreboardData[i].r4;
+      cell.classList.add("text-centre", "score-value");
+    }
+
     row = table.insertRow();
 
     cell = row.insertCell();
@@ -147,7 +157,14 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
     cell = row.insertCell();
     cell.textContent = "R3";
     cell.classList.add("text-centre", "score-title");
+
+    if (scoreboardData[i].r4) {
+      cell = row.insertCell();
+      cell.textContent = "R4";
+      cell.classList.add("text-centre", "score-title");
+    }
   }
+  console.log("Refresh finished");
 }
 
 function getEspnData() {
