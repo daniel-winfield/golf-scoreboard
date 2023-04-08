@@ -1,3 +1,10 @@
+body {
+  --liv-colour-primary-values: 0, 0, 0;
+  --liv-colour-secondary-values: 255, 255, 255;
+  --masters-colour-primary-values: 25, 53, 38;
+  --masters-colour-secondary-values: 203, 210, 208;
+}
+
 .flag {
   width: 150px;
   position: absolute;
@@ -18,9 +25,9 @@
 }
 
 .liv-theme {
-  --bg-colour-values: 0, 0, 0;
+  --bg-colour-values: var(--liv-colour-primary-values);
   --bg-colour: rgb(var(--bg-colour-values));
-  --text-colour-values: 255, 255, 255;
+  --text-colour-values: var(--liv-colour-secondary-values);
   --text-colour: rgb(var(--text-colour-values));
   color: #ffffff;
   background-color: black;
@@ -28,9 +35,9 @@
 }
 
 .masters-theme {
-  --bg-colour-values: 25, 53, 38;
+  --bg-colour-values: var(--masters-colour-primary-values);
   --bg-colour: rgb(var(--bg-colour-values));
-  --text-colour-values: 203, 210, 208;
+  --text-colour-values: var(--masters-colour-secondary-values);
   --text-colour: rgb(var(--text-colour-values));
   background-color: var(--bg-colour);
   color: var(--text-colour);
@@ -164,4 +171,82 @@ table {
 
 hr.cutoff-line {
   border-style: dashed;
+}
+
+.pending-selection #timestamp-container,
+.pending-selection .sb-container {
+  display: none;
+}
+
+.tournament-selector {
+  display: none;
+}
+
+.tournament-selector div {
+  width: 100vw;
+  height: 100vh;
+  line-height: 100vh;
+  text-align: center;
+  font-size: 2em;
+  transition: 0.15s ease-out;
+  background: none;
+}
+
+.tournament-selector div:hover {
+  font-size: 2.5em;
+}
+
+.tournament-selector a {
+  display: block;
+  text-decoration: none;
+}
+
+.pending-selection {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    94deg,
+    rgb(var(--masters-colour-primary-values)),
+    rgb(var(--masters-colour-primary-values)) 50%,
+    rgb(var(--liv-colour-primary-values)) 50%,
+    rgb(var(--liv-colour-primary-values))
+  );
+}
+
+.pending-selection .tournament-selector {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+}
+
+.tournament-selector .masters-theme a {
+  color: rgb(var(--masters-colour-secondary-values));
+}
+
+.tournament-selector .liv-theme a {
+  color: rgb(var(--liv-colour-secondary-values));
+}
+
+@media (orientation: portrait) {
+  .pending-selection .tournament-selector {
+    flex-direction: column;
+  }
+
+  .tournament-selector div {
+    line-height: 50vh;
+  }
+
+  .pending-selection {
+    background: linear-gradient(
+      174deg,
+      rgb(var(--masters-colour-primary-values)),
+      rgb(var(--masters-colour-primary-values)) 50%,
+      rgb(var(--liv-colour-primary-values)) 50%,
+      rgb(var(--liv-colour-primary-values))
+    );
+    font-size: 3em;
+  }
 }

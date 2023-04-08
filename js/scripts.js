@@ -4,7 +4,7 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 
 let value = params.tournament;
 updateScoreboard(value);
-setInterval(updateScoreboard, 2 * 60 * 1000, value);
+setInterval(updateScoreboard, 10 * 60 * 1000, value);
 
 function updateScoreboard(value) {
   console.log("Refresh started: " + value);
@@ -14,12 +14,15 @@ function updateScoreboard(value) {
       // getEspnData();
 
       document.body.classList.add("liv-theme");
+      document.body.classList.remove("pending-selection");
       break;
     case "masters":
       getMastersData();
       document.body.classList.add("masters-theme");
+      document.body.classList.remove("pending-selection");
       break;
     default:
+      document.body.classList.add("pending-selection");
       break;
   }
 }
