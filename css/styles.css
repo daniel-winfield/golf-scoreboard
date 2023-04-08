@@ -249,4 +249,14 @@ hr.cutoff-line {
     );
     font-size: 3em;
   }
+
+  .player-name,
+  .score-hero {
+    font-size: 3em;
+  }
+
+  .score-value,
+  .score-title {
+    font-size: 1.5em;
+  }
 }
