@@ -6,7 +6,7 @@
   left: -9999px;
   right: -9999px;
   margin: auto;
-  opacity: 85%;
+  opacity: 65%;
 }
 
 .flag-container {
@@ -30,7 +30,7 @@
 .masters-theme {
   --bg-colour-values: 25, 53, 38;
   --bg-colour: rgb(var(--bg-colour-values));
-  --text-colour-values: 0, 204, 141;
+  --text-colour-values: 203, 210, 208;
   --text-colour: rgb(var(--text-colour-values));
   background-color: var(--bg-colour);
   color: var(--text-colour);
@@ -115,7 +115,7 @@ table {
 }
 
 .position.position-1 {
-  background-color: #ffe223;
+  background-color: #ffef82;
   color: #6b5d03;
 }
 

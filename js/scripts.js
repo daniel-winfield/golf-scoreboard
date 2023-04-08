@@ -25,11 +25,6 @@ function updateScoreboard(value) {
 }
 
 function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
-  if (pageTitle) {
-    let titleElement = document.getElementById("sb-name");
-    titleElement.innerText = pageTitle;
-  }
-
   if (timestamp) {
     let timestampElement = document.getElementById("sb-timestamp");
     timestampElement.innerText = new Date(timestamp).toLocaleString("en-GB", {
@@ -51,9 +46,16 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
     cutoffIndex = calculateCutoffLine(scoreboardData, cutoffNumber);
   }
 
-  for (let i = 0; i < scoreboardData.length; i++) {
-    let numOfCols = 9;
+  let roundsToDisplay = Math.max(...scoreboardData.map((d) => d.rounds.length));
+  let numOfCols = 5 + roundsToDisplay;
 
+  if (pageTitle) {
+    let titleElement = document.getElementById("sb-name");
+    titleElement.innerText = pageTitle;
+    titleElement.colSpan = numOfCols;
+  }
+
+  for (let i = 0; i < scoreboardData.length; i++) {
     if (cutoffIndex && i == cutoffIndex) {
       row = table.insertRow();
       cell = row.insertCell();
@@ -118,51 +120,24 @@ function addToScoreboard(scoreboardData, timestamp, pageTitle, cutoffNumber) {
     cell.classList.add("text-left", "player-name");
     cell.rowSpan = 3;
 
-    let numOfRounds = 4;
     cell = row.insertCell();
     cell.textContent = scoreboardData[i].score;
     cell.classList.add("text-centre", "score-hero");
-    cell.colSpan = numOfRounds;
+    cell.colSpan = roundsToDisplay;
 
     row = table.insertRow();
-
-    cell = row.insertCell();
-    cell.textContent = scoreboardData[i].r1;
-    cell.classList.add("text-centre", "score-value");
-
-    cell = row.insertCell();
-    cell.textContent = scoreboardData[i].r2;
-    cell.classList.add("text-centre", "score-value");
-
-    cell = row.insertCell();
-    cell.textContent = scoreboardData[i].r3;
-    cell.classList.add("text-centre", "score-value");
-
-    if (scoreboardData[i].r4) {
+    scoreboardData[i].rounds.forEach((r) => {
       cell = row.insertCell();
-      cell.textContent = scoreboardData[i].r4;
+      cell.textContent = r;
       cell.classList.add("text-centre", "score-value");
-    }
+    });
 
     row = table.insertRow();
-
-    cell = row.insertCell();
-    cell.textContent = "R1";
-    cell.classList.add("text-centre", "score-title");
-
-    cell = row.insertCell();
-    cell.textContent = "R2";
-    cell.classList.add("text-centre", "score-title");
-
-    cell = row.insertCell();
-    cell.textContent = "R3";
-    cell.classList.add("text-centre", "score-title");
-
-    if (scoreboardData[i].r4) {
+    scoreboardData[i].rounds.forEach((r, index) => {
       cell = row.insertCell();
-      cell.textContent = "R4";
+      cell.textContent = `R${index + 1}`;
       cell.classList.add("text-centre", "score-title");
-    }
+    });
   }
   console.log("Refresh finished");
 }
@@ -203,43 +178,18 @@ function getMastersData() {
     .then((data) => {
       let scoreboardData = data.events[0].competitions[0].competitors.map(
         (c, index) => {
+          let rounds = c.linescores.map((l) => {
+            return constructRoundScore(
+              l.value,
+              l.linescores != null ? l.linescores.length : null
+            );
+          });
+
           return {
             name: c.athlete.shortName,
             flag: c.athlete.flag,
             score: c.score,
-            r1: c.linescores[0]
-              ? constructRoundScore(
-                  c.linescores[0].value,
-                  c.linescores[0].linescores != null
-                    ? c.linescores[0].linescores.length
-                    : null
-                )
-              : "~",
-            r2: c.linescores[1]
-              ? constructRoundScore(
-                  c.linescores[1].value,
-                  c.linescores[1].linescores != null
-                    ? c.linescores[1].linescores.length
-                    : null
-                )
-              : "~",
-            r3: c.linescores[2]
-              ? constructRoundScore(
-                  c.linescores[2].value,
-                  c.linescores[2].linescores != null
-                    ? c.linescores[2].linescores.length
-                    : null
-                )
-              : "~",
-            r4:
-              c.linescores[3] && c.linescores[3].length
-                ? constructRoundScore(
-                    c.linescores[3].value,
-                    c.linescores[3].linescores != null
-                      ? c.linescores[3].linescores.length
-                      : null
-                  )
-                : "~",
+            rounds: rounds,
             position: index + 1,
           };
         }
@@ -280,9 +230,7 @@ function getLivData() {
           name: c.name,
           flag: { href: c.team.logoUrl, alt: c.team.name },
           score: c.totalScore,
-          r1: c.rounds[0],
-          r2: c.rounds[1],
-          r3: c.rounds[2],
+          rounds: c.rounds,
           position: c.rank,
         };
       });
